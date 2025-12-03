@@ -2,7 +2,7 @@ package com.pandarin.aoc2025.day03.part1
 
 import com.pandarin.aoc2025.util.FileUtils
 
-fun findMaxJoltage(entry: String): Int {
+private fun findMaxJoltage(entry: String): Int {
     for (first in 9 downTo 0) {
         val firstChar = first.digitToChar()
         val firstCharIdx = entry.indexOf(firstChar)
