@@ -1,4 +1,4 @@
-package com.pandarin.aoc2025.day04.part1
+package com.pandarin.aoc2025.day04.part2
 
 import com.pandarin.aoc2025.util.FileUtils
 
@@ -26,6 +26,21 @@ private fun getRollValue(rolls: Array<BooleanArray>, x: Int, y: Int): Int {
     return if (rolls[x][y]) 1 else 0
 }
 
+fun findAccessibleRolls(rolls: Array<BooleanArray>): List<Pair<Int, Int>> {
+    val result = mutableListOf<Pair<Int, Int>>()
+    for (y in 0..<rolls.size) {
+        for (x in 0..<rolls[0].size) {
+            if (!rolls[x][y]) continue
+            val neighborRolls = getNeighborCoordinates(x, y)
+                .sumOf { getRollValue(rolls, it.first, it.second) }
+            if (neighborRolls < THRESHOLD) {
+                result.add(x to y)
+            }
+        }
+    }
+    return result
+}
+
 fun main() {
     // Parse the rolls into a 2D array
     val lines = FileUtils.readLines("day04.txt")
@@ -35,17 +50,15 @@ fun main() {
             rolls[x][y] = (c == '@')
         }
     }
-    // Find rolls where the neighboring rolls are less than the threshold
+    // Remove accessible rolls until we can no longer remove any
     var result = 0
-    for (y in 0..<rolls.size) {
-        for (x in 0..<rolls[0].size) {
-            if (!rolls[x][y]) continue
-            val neighborRolls = getNeighborCoordinates(x, y)
-                .sumOf { getRollValue(rolls, it.first, it.second) }
-            if (neighborRolls < THRESHOLD) {
-                ++result
-            }
+    var accessibleRolls: List<Pair<Int, Int>>
+    do {
+        accessibleRolls = findAccessibleRolls(rolls)
+        result += accessibleRolls.size
+        for ((x, y) in accessibleRolls) {
+            rolls[x][y] = false
         }
-    }
+    } while (!accessibleRolls.isEmpty())
     println(result)
 }
