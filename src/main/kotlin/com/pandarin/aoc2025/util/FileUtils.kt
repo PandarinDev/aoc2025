@@ -1,7 +1,5 @@
 package com.pandarin.aoc2025.util
 
-import java.io.File
-
 class FileUtils {
 
     companion object {
@@ -9,8 +7,13 @@ class FileUtils {
         fun readString(filePath: String) =
             FileUtils::class.java.getResourceAsStream("/$filePath")!!.bufferedReader().use { it.readText() }
 
-        fun readLines(filePath: String) =
-            readString(filePath).lines().filter { it.isNotEmpty() }
+        fun readLines(filePath: String, keepEmptyLines: Boolean = false): List<String> {
+            val result = readString(filePath).lines()
+            if (keepEmptyLines) {
+                return result
+            }
+            return result.filter { it.isNotEmpty() }
+        }
 
     }
 

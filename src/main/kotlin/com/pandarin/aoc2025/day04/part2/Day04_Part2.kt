@@ -26,7 +26,7 @@ private fun getRollValue(rolls: Array<BooleanArray>, x: Int, y: Int): Int {
     return if (rolls[x][y]) 1 else 0
 }
 
-fun findAccessibleRolls(rolls: Array<BooleanArray>): List<Pair<Int, Int>> {
+private fun findAccessibleRolls(rolls: Array<BooleanArray>): List<Pair<Int, Int>> {
     val result = mutableListOf<Pair<Int, Int>>()
     for (y in 0..<rolls.size) {
         for (x in 0..<rolls[0].size) {
