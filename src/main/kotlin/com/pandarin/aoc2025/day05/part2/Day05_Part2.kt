@@ -5,17 +5,17 @@ import com.pandarin.aoc2025.util.pairs
 import kotlin.math.max
 import kotlin.math.min
 
-typealias Range = Pair<Long, Long>
+private typealias Range = Pair<Long, Long>
 
-fun rangeLength(range: Range): Long = range.second - range.first + 1
+private fun rangeLength(range: Range): Long = range.second - range.first + 1
 
-fun isOverlapping(first: Range, second: Range) =
+private fun isOverlapping(first: Range, second: Range) =
         (first.first >= second.first && first.first <= second.second) || // First one starts inside second one
         (second.first >= first.first && second.first <= first.second) // Second one starts inside the first one
 
-fun mergeRanges(first: Range, second: Range) = min(first.first, second.first) to max(first.second, second.second)
+private fun mergeRanges(first: Range, second: Range) = min(first.first, second.first) to max(first.second, second.second)
 
-fun resolveOverlaps(ranges: List<Range>): List<Range> {
+private fun resolveOverlaps(ranges: List<Range>): List<Range> {
     val currentRanges = ranges.toMutableList()
     val getOverlapping = { currentRanges.pairs().firstOrNull { isOverlapping(it.first, it.second) } }
     var overlapping = getOverlapping()
