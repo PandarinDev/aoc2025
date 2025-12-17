@@ -8,6 +8,7 @@ class Graph<T>(
 
     constructor(vertices: List<T>) : this(vertices.toMutableList(), mutableSetOf()) {}
 
+    // TODO: This implementation is heavily suboptimal which causes day 8 to run pretty slow. Optimize.
     fun groups(): List<List<T>> {
         val result = vertices.map { mutableListOf(it) }.toMutableList()
         for (edge in edges) {
