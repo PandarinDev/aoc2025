@@ -3,10 +3,12 @@ package com.pandarin.aoc2025.util
 data class Edge<T>(val first: T, val second: T)
 
 class Graph<T>(
-    val vertices: MutableList<T> = mutableListOf(),
+    val vertices: MutableSet<T> = mutableSetOf(),
     val edges: MutableSet<Edge<T>> = mutableSetOf()) {
 
-    constructor(vertices: List<T>) : this(vertices.toMutableList(), mutableSetOf()) {}
+    fun edgesWith(vertex: T) = edges.filter { it.first == vertex || it.second == vertex }
+
+    fun edgesFrom(vertex: T) = edges.filter { it.first == vertex }
 
     // TODO: This implementation is heavily suboptimal which causes day 8 to run pretty slow. Optimize.
     fun groups(): List<List<T>> {

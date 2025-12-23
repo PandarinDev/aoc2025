@@ -24,7 +24,7 @@ private fun parseBox(line: String): JunctionBox {
 private const val ITERATIONS = 1000
 
 fun main() {
-    val boxes = FileUtils.readLines("day08.txt").map { parseBox(it) }
+    val boxes = FileUtils.readLines("day08.txt").map { parseBox(it) }.toMutableSet()
     val circuits = Graph(boxes)
     val processedPairs = mutableSetOf<Pair<JunctionBox, JunctionBox>>()
     for (i in 0..<ITERATIONS) {

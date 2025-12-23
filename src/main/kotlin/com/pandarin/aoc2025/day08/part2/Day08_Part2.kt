@@ -8,7 +8,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.system.exitProcess
 
-private data class JunctionBox(val x: Int, val y: Int, val z: Int) {
+private class JunctionBox(val x: Int, val y: Int, val z: Int) {
 
     fun distance(other: JunctionBox): Double = sqrt(
         (x - other.x).toDouble().pow(2.0) +
@@ -23,15 +23,16 @@ private fun parseBox(line: String): JunctionBox {
 }
 
 fun main() {
-    val boxes = FileUtils.readLines("day08.txt").map { parseBox(it) }
+    val boxes = FileUtils.readLines("day08.txt").map { parseBox(it) }.toMutableSet()
     val circuits = Graph(boxes)
-    val processedPairs = mutableSetOf<Pair<JunctionBox, JunctionBox>>()
+    // We sort by descending to make the removal operation faster
+    val closestPairs = boxes.pairs()
+        .sortedByDescending { it.first.distance(it.second) }
+        .toMutableList()
     while (true) {
         val groups = circuits.groups()
-        val closest = boxes.pairs()
-            .filter { !processedPairs.contains(it) }
-            .minBy { it.first.distance(it.second) }
-        processedPairs.add(closest)
+        val closest = closestPairs.last()
+        closestPairs.removeLast()
         val differentCircuits = groups.none { it.contains(closest.first) && it.contains(closest.second) }
         if (differentCircuits) {
             circuits.edges.add(Edge(closest.first, closest.second))
