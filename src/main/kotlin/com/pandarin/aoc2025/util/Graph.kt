@@ -1,5 +1,7 @@
 package com.pandarin.aoc2025.util
 
+import java.util.LinkedList
+
 data class Edge<T>(val first: T, val second: T)
 
 class Graph<T>(
@@ -23,6 +25,29 @@ class Graph<T>(
             }
         }
         return result
+    }
+
+    fun pathsBetween(from: T, to: T): List<List<T>> {
+        data class Path(val current: T, val path: List<T>)
+        val paths = mutableListOf<List<T>>()
+        val toWalk = LinkedList<Path>()
+        toWalk.add(Path(from, emptyList()))
+        while (toWalk.isNotEmpty()) {
+            val vertexWithPath = toWalk.pop()
+            // If we arrived to our destination save the path and continue
+            if (vertexWithPath.current == to) {
+                paths.add(vertexWithPath.path)
+                continue
+            }
+            // Otherwise add all outgoing edges that we need to visit
+            val edges = edgesFrom(vertexWithPath.current)
+            for (edge in edges) {
+                val path = vertexWithPath.path.toMutableList()
+                path.add(edge.second)
+                toWalk.add(Path(edge.second, path))
+            }
+        }
+        return paths
     }
 
 }
